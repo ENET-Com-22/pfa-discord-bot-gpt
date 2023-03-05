@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --setupFiles dotenv/config",
+    "test": "jest",
     "start": "node index.js"
   },
   "keywords": [],
