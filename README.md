@@ -52,7 +52,7 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 
 ## Configure app
 
-[TODO]
+[TODOo]
 
 ## Running the project
 
