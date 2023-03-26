@@ -11,7 +11,7 @@ jobs:
   build:
   
     runs-on: ubuntu-latest
-
+    environment: hamdi
 
     steps:
     - name: copy code
@@ -23,4 +23,8 @@ jobs:
         cache: 'npm'
     - run: npm install
     - run: npm ci
-    - run: npm test
+    - env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          OPENAI_ORG: ${{ secrets.OPENAI_ORG }}
+      run: npm test
