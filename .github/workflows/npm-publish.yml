@@ -27,11 +27,12 @@ jobs:
   docker:
 
     runs-on: ubuntu-latest
+    environment: haitham
 
     steps:
     - uses: actions/checkout@v1
     - name: Build & Push Image
       run: |
-        echo "${{ secrets.DOCKERPW }}" | docker login -u "dhhaitham" --password-stdin
+        echo ${{ secrets.DOCKERPW }} | docker login -u "dhhaitham" --password-stdin
         docker image build -t dhhaitham/discord-bot:latest .
         docker push dhhaitham/discord-bot:latest
