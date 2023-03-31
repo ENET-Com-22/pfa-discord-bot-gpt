@@ -28,7 +28,7 @@ jobs:
 
     runs-on: ubuntu-latest
     environment: haitham
-
+    needs: build
     steps:
     - uses: actions/checkout@v1
     - name: Build & Push Image
