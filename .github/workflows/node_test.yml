@@ -28,3 +28,17 @@ jobs:
           OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
           OPENAI_ORG: ${{ secrets.OPENAI_ORG }}
       run: npm test
+      
+  docker:  
+
+    runs-on: ubuntu-latest
+    environment: haitham
+    needs: build
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build & Push Image
+      run: |
+        echo ${{ secrets.DOCKERPW }} | docker login -u ${{ secrets.DOCKERUSER }} --password-stdin
+        docker image build -t hamdiing/discord-bot:latest .
+        docker push hamdiing/discord-bot:latest
+
