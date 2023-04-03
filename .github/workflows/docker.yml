@@ -7,6 +7,7 @@ on:
   workflow_run:
     workflows: [Build & Test Node app (CI) for dev]
     types: [completed]
+    branches: [dev]
 
 permissions:
   contents: 'read'
