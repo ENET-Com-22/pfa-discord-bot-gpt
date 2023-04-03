@@ -47,7 +47,7 @@ client.on('messageCreate', function(message){
 
         (async () => {
         const getResponse = await openai.createCompletion({
-            model: "text-davinci-003",
+            model: "gpt-3.5-turbo",
             prompt: prompt,
             temperature: 0.9,
             max_tokens: 100,
