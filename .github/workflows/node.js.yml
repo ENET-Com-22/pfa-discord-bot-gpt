@@ -1,14 +1,14 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: Node.js CI for dev
+name: Build & Test Node app (CI) for dev
 
 on:
   push:
     branches: [ "dev" ]
 
 jobs:
-  build:
+  build_test_node:
     runs-on: ubuntu-latest
     environment: dev
 
