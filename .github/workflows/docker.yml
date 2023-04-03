@@ -14,7 +14,7 @@ permissions:
   packages: 'write'
 
 jobs:
-  on-success:
+  build-publish-docker:
     runs-on: ubuntu-latest
     environment: dev
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -38,5 +38,5 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ghcr.io/${{ env.REPO }}:${{ github.sha }}
+        tags: ghcr.io/${{ env.REPO }}:latest
         file: ./Dockerfile
