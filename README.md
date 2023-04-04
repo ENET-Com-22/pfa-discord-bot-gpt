@@ -2,6 +2,9 @@
 
 [TODO App Description]
 
+[![Build & Test Node app (CI) for dev](https://github.com/ENET-Com-22/pfa-discord-bot-gpt/actions/workflows/node.js.yml/badge.svg)](https://github.com/ENET-Com-22/pfa-discord-bot-gpt/actions/workflows/node.js.yml) 
+[![Build & publish Docker image for dev](https://github.com/ENET-Com-22/pfa-discord-bot-gpt/actions/workflows/docker.yml/badge.svg)](https://github.com/ENET-Com-22/pfa-discord-bot-gpt/actions/workflows/docker.yml)
+
 ---
 ## Requirements
 
