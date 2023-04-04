@@ -6,6 +6,10 @@ name: Build & Test Node app (CI) for dev
 on:
   push:
     branches: [ "dev" ]
+    paths:
+      - '**.js'
+      - '**.json'
+      - 'Dockerfile'
 
 jobs:
   build_test_node:
