@@ -1,6 +1,6 @@
 # PFA Discord Bot GPT (TODO)
 
-[TODO]
+[TODO App Description]
 
 ---
 ## Requirements
@@ -52,12 +52,15 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 
 ## Configure app
 
-[TODO]
+Make a copy of [.env-tamplate](./.env-template) and rename it to `.env`.
+
+Next, you need to fill enviroment vars inside [.env](./.env) with your own APIs keys. 
+
+- DISCORD_TOKEN - [Discord Developer Portal](https://discord.com/developers/applications)
+- OPENAI_ORG - [OpenAI Organization settings](https://platform.openai.com/account/org-settings)
+- OPENAI_KEY - [OpenAI API keys](https://platform.openai.com/account/api-keys)
+
 
 ## Running the project
 
     $ npm start
-
-<!-- ## Simple build for production
-
-    $ yarn build -->
