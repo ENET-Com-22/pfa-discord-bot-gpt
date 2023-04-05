@@ -62,6 +62,7 @@ jobs:
         resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }} 
         dns-name-label: url-for-container
         image: pfaregistry.azurecr.io/${{ env.REPO }}-${{ github.ref_name }}:latest
+        registry-login-server: ${{ secrets.ACR_LOGIN_SERVER }}
         registry-username: ${{ secrets.ACR_USERNAME }}
         registry-password: ${{ secrets.ACR_PASSWORD }}
         name: pfa-discord-bot-container
