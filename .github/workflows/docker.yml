@@ -60,7 +60,7 @@ jobs:
       uses: 'azure/aci-deploy@v1'
       with:
         resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }} 
-        dns-name-label: url-for-container
+        dns-name-label: url-pfa-discord-bot
         image: pfaregistry.azurecr.io/${{ env.REPO }}-${{ github.ref_name }}:latest
         registry-login-server: ${{ secrets.ACR_LOGIN_SERVER }}
         registry-username: ${{ secrets.ACR_USERNAME }}
