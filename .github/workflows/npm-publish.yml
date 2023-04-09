@@ -39,6 +39,7 @@ jobs:
         
   build-and-deploy:
         runs-on: ubuntu-latest
+        environment: haitham
         steps:
         # checkout the repo
         - name: 'Checkout GitHub Action'
