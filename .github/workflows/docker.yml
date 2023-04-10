@@ -8,7 +8,7 @@ on:
   workflow_run:
     workflows: [Build & Test Node app (CI) for dev]
     types: [completed]
-    branches: [dev]
+    branches: [dev, gpt-3.5-model]
 
 permissions:
   contents: 'read'
@@ -44,6 +44,12 @@ jobs:
         username: ${{ secrets.ACR_USERNAME  }}
         password: ${{ secrets.ACR_PASSWORD }}
 
+    - name: Log in to Docker Hub registry
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME  }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
     - name: Lowercase the repo name
       run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
 
@@ -52,6 +58,7 @@ jobs:
       with:
         push: true
         tags: |
+          ${{ secrets.DOCKERHUB_USERNAME  }}/pfa-discord-bot-gpt-${{ github.ref_name }}:latest
           ghcr.io/${{ env.REPO }}-${{ github.ref_name }}:latest
           pfaregistry.azurecr.io/${{ env.REPO }}-${{ github.ref_name }}:latest
         file: ./Dockerfile
@@ -60,12 +67,12 @@ jobs:
       uses: 'azure/aci-deploy@v1'
       with:
         resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }} 
-        dns-name-label: url-pfa-discord-bot
+        dns-name-label: pfa-discord-bot-${{ github.ref_name }}
         image: pfaregistry.azurecr.io/${{ env.REPO }}-${{ github.ref_name }}:latest
         registry-login-server: ${{ secrets.ACR_LOGIN_SERVER }}
         registry-username: ${{ secrets.ACR_USERNAME }}
         registry-password: ${{ secrets.ACR_PASSWORD }}
-        name: pfa-discord-bot-container
+        name: pfa-discord-bot-container-${{ github.ref_name }}
         secure-environment-variables: |
           DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
           OPENAI_KEY=${{ secrets.OPENAI_KEY }}
