@@ -58,21 +58,21 @@ jobs:
       with:
         push: true
         tags: |
-          ${{ secrets.DOCKERHUB_USERNAME  }}/pfa-discord-bot-gpt-${{ github.ref_name }}:latest
-          ghcr.io/${{ env.REPO }}-${{ github.ref_name }}:latest
-          pfaregistry.azurecr.io/${{ env.REPO }}-${{ github.ref_name }}:latest
+          ${{ secrets.DOCKERHUB_USERNAME  }}/pfa-discord-bot-gpt-${{ github.event.workflow_run.head_branch }}:latest
+          ghcr.io/${{ env.REPO }}-${{ github.event.workflow_run.head_branch }}:latest
+          pfaregistry.azurecr.io/${{ env.REPO }}-${{ github.event.workflow_run.head_branch }}:latest
         file: ./Dockerfile
 
     - name: 'Deploy to Azure Container Instances'
       uses: 'azure/aci-deploy@v1'
       with:
         resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }} 
-        dns-name-label: pfa-discord-bot-${{ github.ref_name }}
-        image: pfaregistry.azurecr.io/${{ env.REPO }}-${{ github.ref_name }}:latest
+        dns-name-label: pfa-discord-bot-${{ github.event.workflow_run.head_branch }}
+        image: pfaregistry.azurecr.io/${{ env.REPO }}-${{ github.event.workflow_run.head_branch }}:latest
         registry-login-server: ${{ secrets.ACR_LOGIN_SERVER }}
         registry-username: ${{ secrets.ACR_USERNAME }}
         registry-password: ${{ secrets.ACR_PASSWORD }}
-        name: pfa-discord-bot-container-${{ github.ref_name }}
+        name: pfa-discord-bot-container-${{ github.event.workflow_run.head_branch }}
         secure-environment-variables: |
           DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
           OPENAI_KEY=${{ secrets.OPENAI_KEY }}
