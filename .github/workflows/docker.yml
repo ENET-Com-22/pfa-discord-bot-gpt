@@ -52,6 +52,11 @@ jobs:
     - name: Lowercase the repo name
       run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
 
+    - name: Get friendly branch name
+      run: |
+        branchName=${{ github.event.workflow_run.head_branch }}
+        echo "BRANCH_NAME_FRIENDLY=$(echo "$branchName" | tr '[:upper:]' '[:lower:]' | sed -e 's/[^a-zA-Z0-9.]//g' -e 's/\./-/g')" >>${GITHUB_ENV}
+
     - name: Build and push container image to GitHub/Azure registry
       uses: docker/build-push-action@v4
       with:
@@ -66,12 +71,12 @@ jobs:
       uses: 'azure/aci-deploy@v1'
       with:
         resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }} 
-        dns-name-label: pfa-discord-bot-${{ github.event.workflow_run.head_branch }}
+        dns-name-label: pfa-discord-bot-${{ env.BRANCH_NAME_FRIENDLY }}
         image: ghcr.io/${{ env.REPO }}-${{ github.event.workflow_run.head_branch }}:latest
         registry-login-server: ghcr.io
         registry-username: ${{ github.actor }}
         registry-password: ${{ secrets.GITHUB_TOKEN }}
-        name: pfa-discord-bot-container-${{ github.event.workflow_run.head_branch }}
+        name: pfa-discord-bot-container-${{ env.BRANCH_NAME_FRIENDLY }}
         secure-environment-variables: |
           DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
           OPENAI_KEY=${{ secrets.OPENAI_KEY }}
