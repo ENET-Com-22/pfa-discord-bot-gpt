@@ -24,18 +24,6 @@ jobs:
           OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
           OPENAI_ORG: ${{ secrets.OPENAI_ORG }}
         run: npm test
-  docker:
-
-    runs-on: ubuntu-latest
-    environment: haitham
-    needs: build
-    steps:
-    - uses: actions/checkout@v1
-    - name: Build & Push Image
-      run: |
-        docker login -u ${{ secrets.DOCKERUSER }} -p ${{ secrets.DOCKERPW }}
-        docker build . -t ${{ secrets.DOCKERUSER }}/discord-bot:latest
-        docker push ${{ secrets.DOCKERUSER }}/discord-bot:latest
         
   build-and-deploy:
         runs-on: ubuntu-latest
@@ -50,24 +38,33 @@ jobs:
           with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
         
-        - name: 'Build and push image'
-          uses: azure/docker-login@v1
+        - name: 'Log in to Docker Hub registry'
+          uses: docker/login-action@v2
           with:
-            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            username: ${{ secrets.REGISTRY_USERNAME }}
-            password: ${{ secrets.REGISTRY_PASSWORD }}
-        - run: |
-            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/discordbot:${{ github.sha }}
-            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/discordbot:${{ github.sha }}
+            username: ${{ secrets.DOCKERUSER  }}
+            password: ${{ secrets.DOCKERPW }}
+            
+        - name: Build and push container image to Docker registry
+          uses: docker/build-push-action@v4
+          with:
+              provenance: false
+              push: true
+              tags: |
+                ${{ secrets.DOCKERUSER  }}/pfa-discord-bot-gpt-${{ github.event.workflow_run.head_branch }}:latest
+              file: ./Dockerfile
 
         - name: 'Deploy to Azure Container Instances'
           uses: 'azure/aci-deploy@v1'
           with:
             resource-group: ${{ secrets.RESOURCE_GROUP }}
             dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
-            image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
-            registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            registry-username: ${{ secrets.REGISTRY_USERNAME }}
-            registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+            image:  ${{ secrets.DOCKERUSER  }}/pfa-discord-bot-gpt-${{ github.event.workflow_run.head_branch }}:latest
+            registry-login-server: index.docker.io
+            registry-username: ${{ secrets.DOCKERUSER }}
+            registry-password: ${{ secrets.DOCKERPW }}
             name: aci-sampleapp
+            secure-environment-variables: |
+               DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
+               OPENAI_KEY=${{ secrets.OPENAI_KEY }}
+               OPENAI_ORG=${{ secrets.OPENAI_ORG }}
             location: 'northeurope'
