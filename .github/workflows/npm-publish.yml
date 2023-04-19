@@ -49,8 +49,7 @@ jobs:
           with:
               provenance: false
               push: true
-              tags: |
-                ${{ secrets.DOCKERUSER  }}/pfa-discord-bot-gpt-${{ github.event.workflow_run.head_branch }}:latest
+              tags: ${{ secrets.DOCKERUSER }}/pfa-discord-bot:latest
               file: ./Dockerfile
 
         - name: 'Deploy to Azure Container Instances'
@@ -58,7 +57,7 @@ jobs:
           with:
             resource-group: ${{ secrets.RESOURCE_GROUP }}
             dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
-            image:  ${{ secrets.DOCKERUSER  }}/pfa-discord-bot-gpt-${{ github.event.workflow_run.head_branch }}:latest
+            image:  ${{ secrets.DOCKERUSER  }}/pfa-discord-bot:latest
             registry-login-server: index.docker.io
             registry-username: ${{ secrets.DOCKERUSER }}
             registry-password: ${{ secrets.DOCKERPW }}
